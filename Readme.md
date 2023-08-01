@@ -22,4 +22,6 @@ to `/usr/local/etc`.
 
 Mautic's persisted data lives at `/var/www/html` – we don't modify the
 official image's assumptions around this. On ECS a persistent volume
-(e.g. an EFS mount) must be mapped to this internal path.
+(e.g. an EFS mount) can be mapped to this internal path, or the S3 plugin
+can be used to make the media approach more 12-factor-friendly. (The latter
+would probably be better if it works, but is not yet tested!)

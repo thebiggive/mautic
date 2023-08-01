@@ -3,7 +3,7 @@ version: '2.4'
 services:
 
   mauticdb:
-    image: percona/percona-server:5.7
+    image: percona/percona-server:8.0
     container_name: mauticdb
     volumes:
       - mysql_data:/var/lib/mysql
@@ -15,7 +15,9 @@ services:
       - mautic-net
 
   mautic:
-    image: mautic/mautic:v4-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: mautic
     links:
       - mauticdb:mysql
@@ -26,6 +28,7 @@ services:
     volumes:
       - mautic_data:/var/www/html
     environment:
+      - MAUTIC_DOMAIN=localhost:8080
       - MAUTIC_DB_HOST=mauticdb
       - MAUTIC_DB_USER=root
       - MAUTIC_DB_PASSWORD=mysecret
