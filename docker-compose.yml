@@ -27,7 +27,6 @@ services:
       - mautic_data:/var/www/html
     environment:
       - MAUTIC_DB_HOST=mauticdb
-      - MYSQL_PORT_3306_TCP=3306
       - MAUTIC_DB_USER=root
       - MAUTIC_DB_PASSWORD=mysecret
       - MAUTIC_DB_NAME=mautic
