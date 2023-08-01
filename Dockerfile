@@ -23,6 +23,10 @@ COPY ./entrypoint.sh /entrypoint.sh
 # Apply recommend PHP configuration for best stability and performance.
 COPY ./php-conf/assert.ini /usr/local/etc/php/conf.d/assert.ini
 
+# Ensure Composer can cache in its default location
+RUN mkdir /var/www/.composer
+RUN chown www-data:www-data /var/www/.composer
+
 USER www-data
 
 COPY ./composer.json /var/www/html/composer.json
