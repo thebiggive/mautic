@@ -1,10 +1,13 @@
 FROM thebiggive/php:8.0
 
 # Install the AWS CLI - needed to load in secrets safely from S3. See https://aws.amazon.com/blogs/security/how-to-manage-secrets-for-amazon-ec2-container-service-based-applications-by-using-amazon-s3-and-docker/
-RUN apt-get clean && apt-get update -qq && apt-get install -y awscli libzip-dev && \
+# And `cron`, needed for old school tasks-in-a-web-server management of scheduled stuff inside Mautic, and libs for
+# various extensions. See also https://stackoverflow.com/a/38526260/2803757
+RUN apt-get clean && apt-get update -qq && apt-get install -y awscli cron libc-client-dev libkrb5-dev libpng-dev libzip-dev && \
     rm -rf /var/lib/apt/lists/* /var/cache/apk/*
 
-RUN docker-php-ext-install mysqli zip
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+ && docker-php-ext-install gd imap mysqli sockets zip
 
 COPY ./docker-support/makeconfig.php    /makeconfig.php
 COPY ./docker-support/makedb.php        /makedb.php
@@ -19,6 +22,16 @@ COPY ./entrypoint.sh /entrypoint.sh
 
 # Apply recommend PHP configuration for best stability and performance.
 COPY ./php-conf/assert.ini /usr/local/etc/php/conf.d/assert.ini
+
+USER www-data
+
+COPY ./composer.json /var/www/html/composer.json
+COPY ./composer.lock /var/www/html/composer.lock
+
+# Install PHP dependencies, as www-data.
+RUN composer install --no-interaction --optimize-autoloader --no-dev
+
+USER root
 
 EXPOSE 80
 

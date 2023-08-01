@@ -3,9 +3,14 @@
 This repository is a thin layer for tooling used by the Big Give to
 test and deploy Mautic.
 
-The Docker tag `mautic/mautic:v4-apache`, managed by the Mautic community,
-is the basis for the app code. Everything we do should extend and
-minimally alter the app we pull from the upstream, official Docker images.
+## `cron` tasks
+
+In an effort to avoid re-working too much of the outdated Docker repo's entrypoint logic, we add `cron`
+to our Linux base – everything in one container – which is not very Docker-y or horizontal scaling-safe.
+We should probably take a closer look at what scheduled commands do and any locking ability before running
+this live, particularly with more than one task in an ECS Service.
+
+## Local runs
 
 To test a build locally:
 

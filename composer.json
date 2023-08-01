@@ -133,5 +133,13 @@
         "      composer remove mautic/core-project-message"
       ]
     }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@composer mautic:scaffold"
+    ],
+    "post-update-cmd": [
+      "@composer mautic:scaffold"
+    ]
   }
 }
