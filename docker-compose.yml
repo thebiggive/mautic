@@ -14,13 +14,17 @@ services:
     networks:
       - mautic-net
 
+  # To test locally, temporarily remove the `alb-safe-index.php` modification
+  # (either in that file or by commenting the relevant bit of `entrypoint.sh`
+  # before the build). And comment the S3 custom bits of `secrets_entrypoint.sh`
+  # or stop the image using that entrypoint.
   mautic:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: mautic
     links:
-      - mauticdb:mysql
+      - mauticdb
     depends_on:
       - mauticdb
     ports:
@@ -28,12 +32,12 @@ services:
     volumes:
       - mautic_data:/var/www/html
     environment:
-      - MAUTIC_DOMAIN=localhost:8080
       - MAUTIC_DB_HOST=mauticdb
       - MAUTIC_DB_USER=root
       - MAUTIC_DB_PASSWORD=mysecret
       - MAUTIC_DB_NAME=mautic
       - MAUTIC_RUN_CRON_JOBS=true
+      - MAUTIC_URL=http://localhost:8080
     networks:
       - mautic-net
 
