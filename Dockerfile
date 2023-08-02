@@ -37,6 +37,9 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev
 
 USER root
 
+COPY ./apache-conf/redirects.conf /etc/apache2/conf-available/redirects.conf
+RUN a2enconf redirects
+
 EXPOSE 80
 
 ENTRYPOINT /usr/local/etc/secrets_entrypoint.sh apache2-foreground
