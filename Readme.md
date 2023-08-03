@@ -1,8 +1,11 @@
 # The Big Give's Mautic
 
 We use Mautic's official Composer recommendation repository and its Composer
-packages as the basis for building this, but also check in scaffolding (TODO decide on this! I guess we have to either exclude it – with more of the template project's .gitignore too – and register the scaffold command as post-install & post-update; OR check it all in and don't and make sure it's not already there)
-to make the behaviour similar to others extending `thebiggive/php`.
+packages as the basis for building this, with scaffolding `.gitignore`d
+to keep the repository compact.
+
+The `Dockerfile` runs `composer install`, which has a post-install script to
+generate scaffolding whenever it's not present.
 
 We don't use the official Docker image as it [is not really maintained](https://github.com/mautic/docker-mautic/issues/240)
 as of August 2023, and when we tried Apache tags they were too old to be usable – as
